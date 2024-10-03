@@ -17,23 +17,31 @@ namespace NetCoreServer
         /// </summary>
         /// <param name="address">IP address</param>
         /// <param name="port">Port number</param>
-        public TcpClient(IPAddress address, int port) : this(new IPEndPoint(address, port)) {}
+        public TcpClient(IPAddress address, int port)
+            : this(new IPEndPoint(address, port)) { }
+
         /// <summary>
         /// Initialize TCP client with a given server IP address and port number
         /// </summary>
         /// <param name="address">IP address</param>
         /// <param name="port">Port number</param>
-        public TcpClient(string address, int port) : this(new IPEndPoint(IPAddress.Parse(address), port)) {}
+        public TcpClient(string address, int port)
+            : this(new IPEndPoint(IPAddress.Parse(address), port)) { }
+
         /// <summary>
         /// Initialize TCP client with a given DNS endpoint
         /// </summary>
         /// <param name="endpoint">DNS endpoint</param>
-        public TcpClient(DnsEndPoint endpoint) : this(endpoint as EndPoint, endpoint.Host, endpoint.Port) {}
+        public TcpClient(DnsEndPoint endpoint)
+            : this(endpoint as EndPoint, endpoint.Host, endpoint.Port) { }
+
         /// <summary>
         /// Initialize TCP client with a given IP endpoint
         /// </summary>
         /// <param name="endpoint">IP endpoint</param>
-        public TcpClient(IPEndPoint endpoint) : this(endpoint as EndPoint, endpoint.Address.ToString(), endpoint.Port) {}
+        public TcpClient(IPEndPoint endpoint)
+            : this(endpoint as EndPoint, endpoint.Address.ToString(), endpoint.Port) { }
+
         /// <summary>
         /// Initialize TCP client with a given endpoint, address and port
         /// </summary>
@@ -57,14 +65,17 @@ namespace NetCoreServer
         /// TCP server address
         /// </summary>
         public string Address { get; }
+
         /// <summary>
         /// TCP server port
         /// </summary>
         public int Port { get; }
+
         /// <summary>
         /// Endpoint
         /// </summary>
         public EndPoint Endpoint { get; private set; }
+
         /// <summary>
         /// Socket
         /// </summary>
@@ -74,14 +85,17 @@ namespace NetCoreServer
         /// Number of bytes pending sent by the client
         /// </summary>
         public long BytesPending { get; private set; }
+
         /// <summary>
         /// Number of bytes sending by the client
         /// </summary>
         public long BytesSending { get; private set; }
+
         /// <summary>
         /// Number of bytes sent by the client
         /// </summary>
         public long BytesSent { get; private set; }
+
         /// <summary>
         /// Number of bytes received by the client
         /// </summary>
@@ -95,6 +109,7 @@ namespace NetCoreServer
         /// Will work only if socket is bound on IPv6 address.
         /// </remarks>
         public bool OptionDualMode { get; set; }
+
         /// <summary>
         /// Option: keep alive
         /// </summary>
@@ -102,6 +117,7 @@ namespace NetCoreServer
         /// This option will setup SO_KEEPALIVE if the OS support this feature
         /// </remarks>
         public bool OptionKeepAlive { get; set; }
+
         /// <summary>
         /// Option: TCP keep alive time
         /// </summary>
@@ -109,6 +125,7 @@ namespace NetCoreServer
         /// The number of seconds a TCP connection will remain alive/idle before keepalive probes are sent to the remote
         /// </remarks>
         public int OptionTcpKeepAliveTime { get; set; } = -1;
+
         /// <summary>
         /// Option: TCP keep alive interval
         /// </summary>
@@ -116,6 +133,7 @@ namespace NetCoreServer
         /// The number of seconds a TCP connection will wait for a keepalive response before sending another keepalive probe
         /// </remarks>
         public int OptionTcpKeepAliveInterval { get; set; } = -1;
+
         /// <summary>
         /// Option: TCP keep alive retry count
         /// </summary>
@@ -123,6 +141,7 @@ namespace NetCoreServer
         /// The number of TCP keep alive probes that will be sent before the connection is terminated
         /// </remarks>
         public int OptionTcpKeepAliveRetryCount { get; set; } = -1;
+
         /// <summary>
         /// Option: no delay
         /// </summary>
@@ -130,18 +149,22 @@ namespace NetCoreServer
         /// This option will enable/disable Nagle's algorithm for TCP protocol
         /// </remarks>
         public bool OptionNoDelay { get; set; }
+
         /// <summary>
         /// Option: receive buffer limit
         /// </summary>
         public int OptionReceiveBufferLimit { get; set; } = 0;
+
         /// <summary>
         /// Option: receive buffer size
         /// </summary>
         public int OptionReceiveBufferSize { get; set; } = 8192;
+
         /// <summary>
         /// Option: send buffer limit
         /// </summary>
         public int OptionSendBufferLimit { get; set; } = 0;
+
         /// <summary>
         /// Option: send buffer size
         /// </summary>
@@ -155,6 +178,7 @@ namespace NetCoreServer
         /// Is the client connecting?
         /// </summary>
         public bool IsConnecting { get; private set; }
+
         /// <summary>
         /// Is the client connected?
         /// </summary>
@@ -251,11 +275,23 @@ namespace NetCoreServer
             if (OptionKeepAlive)
                 Socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
             if (OptionTcpKeepAliveTime >= 0)
-                Socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveTime, OptionTcpKeepAliveTime);
+                Socket.SetSocketOption(
+                    SocketOptionLevel.Tcp,
+                    SocketOptionName.TcpKeepAliveTime,
+                    OptionTcpKeepAliveTime
+                );
             if (OptionTcpKeepAliveInterval >= 0)
-                Socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveInterval, OptionTcpKeepAliveInterval);
+                Socket.SetSocketOption(
+                    SocketOptionLevel.Tcp,
+                    SocketOptionName.TcpKeepAliveInterval,
+                    OptionTcpKeepAliveInterval
+                );
             if (OptionTcpKeepAliveRetryCount >= 0)
-                Socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveRetryCount, OptionTcpKeepAliveRetryCount);
+                Socket.SetSocketOption(
+                    SocketOptionLevel.Tcp,
+                    SocketOptionName.TcpKeepAliveRetryCount,
+                    OptionTcpKeepAliveRetryCount
+                );
             // Apply the option: no delay
             if (OptionNoDelay)
                 Socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.NoDelay, true);
@@ -312,7 +348,7 @@ namespace NetCoreServer
                     // Shutdown the socket associated with the client
                     Socket.Shutdown(SocketShutdown.Both);
                 }
-                catch (SocketException) {}
+                catch (SocketException) { }
 
                 // Close the client socket
                 Socket.Close();
@@ -328,7 +364,7 @@ namespace NetCoreServer
                 // Update the client socket disposed flag
                 IsSocketDisposed = true;
             }
-            catch (ObjectDisposedException) {}
+            catch (ObjectDisposedException) { }
 
             // Update the connected flag
             IsConnected = false;
@@ -433,6 +469,7 @@ namespace NetCoreServer
         private bool _receiving;
         private Buffer _receiveBuffer;
         private SocketAsyncEventArgs _receiveEventArg;
+
         // Send buffer
         private readonly object _sendLock = new object();
         private bool _sending;
@@ -455,7 +492,8 @@ namespace NetCoreServer
         /// <param name="offset">Buffer offset</param>
         /// <param name="size">Buffer size</param>
         /// <returns>Size of sent data</returns>
-        public virtual long Send(byte[] buffer, long offset, long size) => Send(buffer.AsSpan((int)offset, (int)size));
+        public virtual long Send(byte[] buffer, long offset, long size) =>
+            Send(buffer.AsSpan((int)offset, (int)size));
 
         /// <summary>
         /// Send data to the server (synchronous)
@@ -503,7 +541,8 @@ namespace NetCoreServer
         /// </summary>
         /// <param name="text">Text to send as a span of characters</param>
         /// <returns>Size of sent text</returns>
-        public virtual long Send(ReadOnlySpan<char> text) => Send(Encoding.UTF8.GetBytes(text.ToArray()));
+        public virtual long Send(ReadOnlySpan<char> text) =>
+            Send(Encoding.UTF8.GetBytes(text.ToArray()));
 
         /// <summary>
         /// Send data to the server (asynchronous)
@@ -519,7 +558,8 @@ namespace NetCoreServer
         /// <param name="offset">Buffer offset</param>
         /// <param name="size">Buffer size</param>
         /// <returns>'true' if the data was successfully sent, 'false' if the client is not connected</returns>
-        public virtual bool SendAsync(byte[] buffer, long offset, long size) => SendAsync(buffer.AsSpan((int)offset, (int)size));
+        public virtual bool SendAsync(byte[] buffer, long offset, long size) =>
+            SendAsync(buffer.AsSpan((int)offset, (int)size));
 
         /// <summary>
         /// Send data to the server (asynchronous)
@@ -537,7 +577,10 @@ namespace NetCoreServer
             lock (_sendLock)
             {
                 // Check the send buffer limit
-                if (((_sendBufferMain.Size + buffer.Length) > OptionSendBufferLimit) && (OptionSendBufferLimit > 0))
+                if (
+                    ((_sendBufferMain.Size + buffer.Length) > OptionSendBufferLimit)
+                    && (OptionSendBufferLimit > 0)
+                )
                 {
                     SendError(SocketError.NoBufferSpaceAvailable);
                     return false;
@@ -574,14 +617,18 @@ namespace NetCoreServer
         /// </summary>
         /// <param name="text">Text to send as a span of characters</param>
         /// <returns>'true' if the text was successfully sent, 'false' if the client is not connected</returns>
-        public virtual bool SendAsync(ReadOnlySpan<char> text) => SendAsync(Encoding.UTF8.GetBytes(text.ToArray()));
+        public virtual bool SendAsync(ReadOnlySpan<char> text) =>
+            SendAsync(Encoding.UTF8.GetBytes(text.ToArray()));
 
         /// <summary>
         /// Receive data from the server (synchronous)
         /// </summary>
         /// <param name="buffer">Buffer to receive</param>
         /// <returns>Size of received data</returns>
-        public virtual long Receive(byte[] buffer) { return Receive(buffer, 0, buffer.Length); }
+        public virtual long Receive(byte[] buffer)
+        {
+            return Receive(buffer, 0, buffer.Length);
+        }
 
         /// <summary>
         /// Receive data from the server (synchronous)
@@ -599,7 +646,13 @@ namespace NetCoreServer
                 return 0;
 
             // Receive data from the server
-            long received = Socket.Receive(buffer, (int)offset, (int)size, SocketFlags.None, out SocketError ec);
+            long received = Socket.Receive(
+                buffer,
+                (int)offset,
+                (int)size,
+                SocketFlags.None,
+                out SocketError ec
+            );
             if (received > 0)
             {
                 // Update statistic
@@ -657,15 +710,29 @@ namespace NetCoreServer
             {
                 process = false;
 
+                // Async receive with the receive handler
                 try
                 {
-                    // Async receive with the receive handler
+                    _receiveEventArg.SetBuffer(
+                        _receiveBuffer.Data,
+                        0,
+                        (int)_receiveBuffer.Capacity
+                    );
+                }
+                catch (InvalidOperationException)
+                {
+                    // The receive buffer is in use by another receive operation
+                    DisconnectAsync();
+                    return;
+                }
+
+                try
+                {
                     _receiving = true;
-                    _receiveEventArg.SetBuffer(_receiveBuffer.Data, 0, (int)_receiveBuffer.Capacity);
                     if (!Socket.ReceiveAsync(_receiveEventArg))
                         process = ProcessReceive(_receiveEventArg);
                 }
-                catch (ObjectDisposedException) {}
+                catch (ObjectDisposedException) { }
             }
         }
 
@@ -690,7 +757,10 @@ namespace NetCoreServer
                     if (_sendBufferFlush.IsEmpty)
                     {
                         // Swap flush and main buffers
-                        _sendBufferFlush = Interlocked.Exchange(ref _sendBufferMain, _sendBufferFlush);
+                        _sendBufferFlush = Interlocked.Exchange(
+                            ref _sendBufferMain,
+                            _sendBufferFlush
+                        );
                         _sendBufferFlushOffset = 0;
 
                         // Update statistic
@@ -721,11 +791,15 @@ namespace NetCoreServer
                 try
                 {
                     // Async write with the write handler
-                    _sendEventArg.SetBuffer(_sendBufferFlush.Data, (int)_sendBufferFlushOffset, (int)(_sendBufferFlush.Size - _sendBufferFlushOffset));
+                    _sendEventArg.SetBuffer(
+                        _sendBufferFlush.Data,
+                        (int)_sendBufferFlushOffset,
+                        (int)(_sendBufferFlush.Size - _sendBufferFlushOffset)
+                    );
                     if (!Socket.SendAsync(_sendEventArg))
                         process = ProcessSend(_sendEventArg);
                 }
-                catch (ObjectDisposedException) {}
+                catch (ObjectDisposedException) { }
             }
         }
 
@@ -739,7 +813,7 @@ namespace NetCoreServer
                 // Clear send buffers
                 _sendBufferMain.Clear();
                 _sendBufferFlush.Clear();
-                _sendBufferFlushOffset= 0;
+                _sendBufferFlushOffset = 0;
 
                 // Update statistic
                 BytesPending = 0;
@@ -774,9 +848,10 @@ namespace NetCoreServer
                         TrySend();
                     break;
                 default:
-                    throw new ArgumentException("The last operation completed on the socket was not a receive or send");
+                    throw new ArgumentException(
+                        "The last operation completed on the socket was not a receive or send"
+                    );
             }
-
         }
 
         /// <summary>
@@ -790,13 +865,29 @@ namespace NetCoreServer
             {
                 // Apply the option: keep alive
                 if (OptionKeepAlive)
-                    Socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+                    Socket.SetSocketOption(
+                        SocketOptionLevel.Socket,
+                        SocketOptionName.KeepAlive,
+                        true
+                    );
                 if (OptionTcpKeepAliveTime >= 0)
-                    Socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveTime, OptionTcpKeepAliveTime);
+                    Socket.SetSocketOption(
+                        SocketOptionLevel.Tcp,
+                        SocketOptionName.TcpKeepAliveTime,
+                        OptionTcpKeepAliveTime
+                    );
                 if (OptionTcpKeepAliveInterval >= 0)
-                    Socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveInterval, OptionTcpKeepAliveInterval);
+                    Socket.SetSocketOption(
+                        SocketOptionLevel.Tcp,
+                        SocketOptionName.TcpKeepAliveInterval,
+                        OptionTcpKeepAliveInterval
+                    );
                 if (OptionTcpKeepAliveRetryCount >= 0)
-                    Socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveRetryCount, OptionTcpKeepAliveRetryCount);
+                    Socket.SetSocketOption(
+                        SocketOptionLevel.Tcp,
+                        SocketOptionName.TcpKeepAliveRetryCount,
+                        OptionTcpKeepAliveRetryCount
+                    );
                 // Apply the option: no delay
                 if (OptionNoDelay)
                     Socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.NoDelay, true);
@@ -941,19 +1032,22 @@ namespace NetCoreServer
         /// <summary>
         /// Handle client connecting notification
         /// </summary>
-        protected virtual void OnConnecting() {}
+        protected virtual void OnConnecting() { }
+
         /// <summary>
         /// Handle client connected notification
         /// </summary>
-        protected virtual void OnConnected() {}
+        protected virtual void OnConnected() { }
+
         /// <summary>
         /// Handle client disconnecting notification
         /// </summary>
-        protected virtual void OnDisconnecting() {}
+        protected virtual void OnDisconnecting() { }
+
         /// <summary>
         /// Handle client disconnected notification
         /// </summary>
-        protected virtual void OnDisconnected() {}
+        protected virtual void OnDisconnected() { }
 
         /// <summary>
         /// Handle buffer received notification
@@ -964,7 +1058,8 @@ namespace NetCoreServer
         /// <remarks>
         /// Notification is called when another part of buffer was received from the server
         /// </remarks>
-        protected virtual void OnReceived(byte[] buffer, long offset, long size) {}
+        protected virtual void OnReceived(byte[] buffer, long offset, long size) { }
+
         /// <summary>
         /// Handle buffer sent notification
         /// </summary>
@@ -974,7 +1069,7 @@ namespace NetCoreServer
         /// Notification is called when another part of buffer was sent to the server.
         /// This handler could be used to send another buffer to the server for instance when the pending size is zero.
         /// </remarks>
-        protected virtual void OnSent(long sent, long pending) {}
+        protected virtual void OnSent(long sent, long pending) { }
 
         /// <summary>
         /// Handle empty send buffer notification
@@ -983,13 +1078,13 @@ namespace NetCoreServer
         /// Notification is called when the send buffer is empty and ready for a new data to send.
         /// This handler could be used to send another buffer to the server.
         /// </remarks>
-        protected virtual void OnEmpty() {}
+        protected virtual void OnEmpty() { }
 
         /// <summary>
         /// Handle error notification
         /// </summary>
         /// <param name="error">Socket error code</param>
-        protected virtual void OnError(SocketError error) {}
+        protected virtual void OnError(SocketError error) { }
 
         #endregion
 
@@ -1002,11 +1097,13 @@ namespace NetCoreServer
         private void SendError(SocketError error)
         {
             // Skip disconnect errors
-            if ((error == SocketError.ConnectionAborted) ||
-                (error == SocketError.ConnectionRefused) ||
-                (error == SocketError.ConnectionReset) ||
-                (error == SocketError.OperationAborted) ||
-                (error == SocketError.Shutdown))
+            if (
+                (error == SocketError.ConnectionAborted)
+                || (error == SocketError.ConnectionRefused)
+                || (error == SocketError.ConnectionReset)
+                || (error == SocketError.OperationAborted)
+                || (error == SocketError.Shutdown)
+            )
                 return;
 
             OnError(error);
